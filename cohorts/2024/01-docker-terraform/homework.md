@@ -1,4 +1,4 @@
-## Module 1 Homework
+## Module 1 Homework check solutions folder for screenshots
 
 ## Docker & SQL
 
@@ -20,8 +20,10 @@ Do the same for "docker run".
 
 Which tag has the following text? - *Automatically remove the container when it exits* 
 
+Solution: using `docker run --help | grep Automatically` 
+
 - `--delete`
-- `--rc`
+- [x] `--rc`
 - `--rmc`
 - `--rm`
 
@@ -33,7 +35,10 @@ Now check the python modules that are installed ( use ```pip list``` ).
 
 What is version of the package *wheel* ?
 
-- 0.42.0
+Solution : run 
+`docker run -it --entrypoint /bin/bash python:3.9 ` then  `pip list | grep wheel `
+
+- [x] 0.42.0
 - 1.0.0
 - 23.0.1
 - 58.1.0
@@ -61,8 +66,14 @@ Tip: started and finished on 2019-09-18.
 
 Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in the format timestamp (date and hour+min+sec) and not in date.
 
+Solution used SQL :
+``` select count(1) 
+from green_tripdata 
+where date(lpep_pickup_datetime) = date('2019-09-18') and  date(lpep_dropoff_datetime) = date('2019-09-18')
+```
+
 - 15767
-- 15612
+- [x] 15612
 - 15859
 - 89009
 
@@ -71,9 +82,17 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 Which was the pick up day with the largest trip distance
 Use the pick up time for your calculations.
 
+Solution used SQL : 
+```
+select date(lpep_pickup_datetime) as pickup_date 
+from green_tripdata
+order by trip_distance desc 
+limit 1
+ ```
+
 - 2019-09-18
 - 2019-09-16
-- 2019-09-26
+- [x] 2019-09-26
 - 2019-09-21
 
 
@@ -83,7 +102,18 @@ Consider lpep_pickup_datetime in '2019-09-18' and ignoring Borough has Unknown
 
 Which were the 3 pick up Boroughs that had a sum of total_amount superior to 50000?
  
-- "Brooklyn" "Manhattan" "Queens"
+ Solution used SQL:
+ ```
+ select z."Borough" as b ,
+        count(1) 
+from green_tripdata gt
+inner join zones z on z."LocationID" = gt."PULocationID"
+where "Borough" != 'Unknown'
+group by 1
+order by 2 desc
+limit 3
+ ```
+- [x] "Brooklyn" "Manhattan" "Queens"
 - "Bronx" "Brooklyn" "Manhattan"
 - "Bronx" "Manhattan" "Queens" 
 - "Brooklyn" "Queens" "Staten Island"
@@ -96,9 +126,20 @@ We want the name of the zone, not the id.
 
 Note: it's not a typo, it's `tip` , not `trip`
 
+```
+select dz."Zone"  
+from green_tripdata gt  
+inner join zones pz on pz."LocationID" = gt."PULocationID"  
+inner join zones dz on dz."LocationID" = gt."DOLocationID"  
+ where date_trunc('month', date(lpep_pickup_datetime))  = date('2019-09-01')  
+	AND pz."Zone" = 'Astoria'  
+order by gt.tip_amount desc
+limit 1 
+```
+
 - Central Park
 - Jamaica
-- JFK Airport
+- [x] JFK Airport
 - Long Island City/Queens Plaza
 
 
@@ -124,6 +165,11 @@ terraform apply
 
 Paste the output of this command into the homework submission form.
 
+
+output 
+```
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:   + create  Terraform will perform the following actions:    # google_bigquery_dataset.demo_dataset will be created   + resource "google_bigquery_dataset" "demo_dataset" ä       + creation_time              = (known after apply)       + dataset_id                 = "demo_dataset_ibrahim_dezc24"       + default_collation          = (known after apply)       + delete_contents_on_destroy = false       + effective_labels           = (known after apply)       + etag                       = (known after apply)       + id                         = (known after apply)       + is_case_insensitive        = (known after apply)       + last_modified_time         = (known after apply)       + location                   = "US"       + max_time_travel_hours      = (known after apply)       + project                    = "tokyo-comfort-411321"       + self_link                  = (known after apply)       + storage_billing_model      = (known after apply)       + terraform_labels           = (known after apply)     å    # google_storage_bucket.demo-bucket will be created   + resource "google_storage_bucket" "demo-bucket" ä       + effective_labels            = (known after apply)       + force_destroy               = true       + id                          = (known after apply)       + location                    = "US"       + name                        = "terraform-demo-terra-bucket-ibrahim_dezc24"       + project                     = (known after apply)       + public_access_prevention    = (known after apply)       + self_link                   = (known after apply)       + storage_class               = "STANDARD"       + terraform_labels            = (known after apply)       + uniform_bucket_level_access = (known after apply)       + url                         = (known after apply)        + lifecycle_rule ä           + action ä               + type = "AbortIncompleteMultipartUpload"             å           + condition ä               + age                   = 1               + matches_prefix        = ÄÅ               + matches_storage_class = ÄÅ               + matches_suffix        = ÄÅ               + with_state            = (known after apply)             å         å     å  Plan: 2 to add, 0 to change, 0 to destroy.  Do you want to perform these actions?   Terraform will perform the actions described above.   Only 'yes' will be accepted to approve.    Enter a value: yes  google_bigquery_dataset.demo_dataset: Creating... google_storage_bucket.demo-bucket: Creating... google_bigquery_dataset.demo_dataset: Creation complete after 0s Äid=projects/tokyo-comfort-411321/datasets/demo_dataset_ibrahim_dezc24Å google_storage_bucket.demo-bucket: Creation complete after 1s Äid=terraform-demo-terra-bucket-ibrahim_dezc24Å
+```
 
 ## Submitting the solutions
 
