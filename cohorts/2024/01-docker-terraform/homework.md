@@ -104,14 +104,15 @@ Which were the 3 pick up Boroughs that had a sum of total_amount superior to 500
  
  Solution used SQL:
  ```
- select z."Borough" as b ,
-        count(1) 
+select z."Borough" as pick_Borough ,
+	sum(total_amount) 
 from green_tripdata gt
 inner join zones z on z."LocationID" = gt."PULocationID"
 where "Borough" != 'Unknown'
 group by 1
+having sum(total_amount) > 50000
 order by 2 desc
-limit 3
+
  ```
 - [x] "Brooklyn" "Manhattan" "Queens"
 - "Bronx" "Brooklyn" "Manhattan"
