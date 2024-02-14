@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: staging
+    database: tokyo-comfort-411321
+    schema: week3_DWH_EU
+
+    tables:
+      - name: BQ_green_tripdata
